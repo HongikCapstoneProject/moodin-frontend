@@ -3,7 +3,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'mypage_controller.dart';
 import 'mypage_model.dart';
 import 'package:provider/provider.dart';
-import '../measure/measure_model.dart';
+import 'package:moodin_app/measure/measure_model.dart';
 
 class MyPageView extends StatelessWidget {
   const MyPageView({super.key});

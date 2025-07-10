@@ -29,9 +29,11 @@ class MeasureModel extends ChangeNotifier {
     }
   }
 }*/
-enum MeasureState { idle, measuring, done }
+import 'package:flutter/material.dart';
 
-class MeasureModel {
+enum MeasuremState { idle, measuring, done }
+
+class MeasureModel extends ChangeNotifier {
   bool isMeasuring = false;
   bool isDone = false;
 

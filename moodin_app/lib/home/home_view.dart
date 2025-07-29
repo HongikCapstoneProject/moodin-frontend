@@ -3,6 +3,7 @@ import 'package:moodin_app/mypage/mypage_view.dart';
 import 'package:provider/provider.dart';
 import 'package:moodin_app/measure/measure_model.dart';
 import 'package:moodin_app/measure/measure_view.dart';
+import 'package:moodin_app/result/result_view.dart';
 
 class HomeView extends StatelessWidget {
   final String username;
@@ -97,7 +98,7 @@ class HomeView extends StatelessWidget {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  const MyPageView()),
+                                                  const ResultView()),
                                         );
                                       },
                                       child: const Text(

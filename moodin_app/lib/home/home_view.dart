@@ -3,6 +3,7 @@ import 'package:moodin_app/mypage/mypage_view.dart';
 import 'package:provider/provider.dart';
 import 'package:moodin_app/measure/measure_model.dart';
 import 'package:moodin_app/measure/measure_view.dart';
+import 'package:moodin_app/survey/survey_view.dart'; // ✅ 설문조사 페이지 import
 
 class HomeView extends StatelessWidget {
   final String username;
@@ -27,7 +28,7 @@ class HomeView extends StatelessWidget {
           ),
           Consumer<MeasureModel>(builder: (context, model, _) {
             if (model.isDone) {
-              // 측정 완료 UI
+              // ✅ 측정 완료 UI
               return Column(
                 children: [
                   Expanded(
@@ -120,36 +121,44 @@ class HomeView extends StatelessWidget {
                       ],
                     ),
                   ),
-                  // 화면 맨 하단에 토끼 + 텍스트 고정
+                  // ✅ bunny + 텍스트 클릭 시 SurveyView로 이동
                   Padding(
-                    // 여백을 40으로 설정 (필요 시 이 값을 조절하세요)
                     padding: const EdgeInsets.only(bottom: 80),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          'assets/images/bunny_emoji.png',
-                          width: 90,
-                          height: 90,
-                        ),
-                        const SizedBox(width: 1),
-                        const Text(
-                          '설문조사를 통해\n오늘의 스트레스와 비교해보세요!',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w800,
-                            color: Color(0xFF364D57),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SurveyView()),
+                        );
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            'assets/images/bunny_emoji.png',
+                            width: 90,
+                            height: 90,
                           ),
-                        ),
-                      ],
+                          const SizedBox(width: 8),
+                          const Text(
+                            '설문조사를 통해\n오늘의 스트레스와 비교해보세요!',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w800,
+                              color: Color(0xFF364D57),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
               );
             }
 
-            // 측정 전 UI
+            // ✅ 측정 전 UI
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -220,6 +229,7 @@ class HomeView extends StatelessWidget {
     );
   }
 
+  // ✅ 하단 네비게이션
   Widget _bottomNav(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,

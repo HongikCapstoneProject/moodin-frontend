@@ -56,61 +56,57 @@ class HomeView extends StatelessWidget {
                   ),
                   const SizedBox(height: 30),
                   Container(
-                    width: MediaQuery.of(context).size.width * 0.8,
+                    width: 360,
                     padding: const EdgeInsets.symmetric(
                         vertical: 24, horizontal: 24),
                     decoration: BoxDecoration(
                       color: Colors.white.withAlpha(153), // 투명도 60%
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(24),
                     ),
-                    child: Column(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          // mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              width: 200,
-                              height: 200,
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Image.asset(
-                                  'assets/images/redlight_main.png',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            const Expanded(
-                              child: Text(
+                        SizedBox(
+                          width: 120,
+                          height: 120,
+                          child: Image.asset(
+                            'assets/images/redlight_main.png',
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
                                 '매우 높음',
                                 style: TextStyle(
-                                  fontSize: 33,
-                                  fontWeight: FontWeight.bold,
+                                  fontSize: 36,
+                                  fontWeight: FontWeight.w800,
                                   color: Colors.red,
                                 ),
-                                overflow: TextOverflow.visible,
-                                softWrap: false,
                               ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const MyPageView()),
-                            );
-                          },
-                          child: const Text(
-                            '자세히 보러가기 >',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black87,
-                            ),
+                              const SizedBox(height: 12),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const MyPageView()),
+                                  );
+                                },
+                                child: const Text(
+                                  '자세히 보러가기 >',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],

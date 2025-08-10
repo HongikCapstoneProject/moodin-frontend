@@ -34,7 +34,7 @@ class SurveyView extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: [
-              // 상단 영역 (아이콘 줄 + 제목 줄)
+              // 상단 영역
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
                 child: Column(
@@ -53,7 +53,8 @@ class SurveyView extends StatelessWidget {
                         IconButton(
                           icon: const Icon(Icons.home, color: Colors.grey),
                           onPressed: () {
-                            Navigator.pushNamed(context, '/'); // 홈 라우트 연결
+                            Navigator.pop(context);
+                            Navigator.pop(context);
                           },
                         ),
                       ],
@@ -83,21 +84,37 @@ class SurveyView extends StatelessWidget {
                     builder: (context, model, _) {
                       return ListView.separated(
                         padding: const EdgeInsets.all(16),
-                        itemCount: questions.length + 1,
+                        itemCount: questions.length + 2, // 출처 텍스트 포함
                         separatorBuilder: (context, index) => const Divider(
                           color: Color.fromARGB(217, 241, 241, 241),
                           thickness: 1,
                           height: 1,
                         ),
                         itemBuilder: (context, index) {
-                          if (index < questions.length) {
+                          if (index == 0) {
+                            // 출처 + 간격
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                Text(
+                                  "출처 : 서울대학교 간호학연구소 - 한국판 지각된 스트레스 척도(perceived stress scale : PSS)",
+                                  style: TextStyle(
+                                    fontSize: 8, 
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                SizedBox(height: 20), // 출처와 첫 질문 사이 간격
+                              ],
+                            );
+                          } else if (index <= questions.length) {
+                            // 질문 항목
                             return ListTile(
                               title: Text(
-                                questions[index],
+                                questions[index - 1],
                                 style: const TextStyle(fontSize: 15),
                               ),
                               trailing: DropdownButton<int>(
-                                value: model.answers[index],
+                                value: model.answers[index - 1],
                                 underline: const SizedBox(),
                                 items: const [
                                   DropdownMenuItem(value: 0, child: Text("선택")),
@@ -107,12 +124,13 @@ class SurveyView extends StatelessWidget {
                                 ],
                                 onChanged: (value) {
                                   if (value != null) {
-                                    model.setAnswer(index, value);
+                                    model.setAnswer(index - 1, value);
                                   }
                                 },
                               ),
                             );
                           } else {
+                            // 결과 버튼
                             return Padding(
                               padding: const EdgeInsets.symmetric(vertical: 24),
                               child: ElevatedButton(
@@ -121,7 +139,7 @@ class SurveyView extends StatelessWidget {
                                   backgroundColor: const Color(0xFF4FC3F7),
                                   foregroundColor: Colors.white,
                                   padding: const EdgeInsets.symmetric(
-                                    vertical: 14, horizontal: 32),
+                                      vertical: 14, horizontal: 32),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
                                   ),

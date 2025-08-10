@@ -34,84 +34,105 @@ class SurveyView extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: [
-              // 상단 바
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              // 상단 영역
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // 뒤로가기 버튼
-                    IconButton(
-                      icon: const Icon(Icons.arrow_back, color: Colors.grey),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
+                    // 첫 번째 줄: 이전, 홈 버튼
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.arrow_back, color: Colors.grey),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.home, color: Colors.grey),
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
                     ),
+                    const SizedBox(height: 8),
+                    // 두 번째 줄: 제목
                     const Text(
                       "스트레스 자가진단",
                       style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF263238)),
-                    ),
-                    // 홈 버튼
-                    IconButton(
-                      icon: const Icon(Icons.home, color: Colors.grey),
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/'); // 홈 라우트 연결
-                      },
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF263238),
+                      ),
                     ),
                   ],
                 ),
               ),
+
+              // 본문 영역
               Expanded(
                 child: Container(
                   decoration: const BoxDecoration(
                     color: Colors.white,
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(24)),
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
                   ),
                   child: Consumer<SurveyModel>(
                     builder: (context, model, _) {
                       return ListView.separated(
                         padding: const EdgeInsets.all(16),
-                        itemCount: questions.length + 1,
+                        itemCount: questions.length + 2, // 출처 텍스트 포함
                         separatorBuilder: (context, index) => const Divider(
                           color: Color.fromARGB(217, 241, 241, 241),
                           thickness: 1,
                           height: 1,
                         ),
                         itemBuilder: (context, index) {
-                          if (index < questions.length) {
+                          if (index == 0) {
+                            // 출처 + 간격
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                Text(
+                                  "출처 : 서울대학교 간호학연구소 - 한국판 지각된 스트레스 척도(perceived stress scale : PSS)",
+                                  style: TextStyle(
+                                    fontSize: 8, 
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                SizedBox(height: 20), // 출처와 첫 질문 사이 간격
+                              ],
+                            );
+                          } else if (index <= questions.length) {
+                            // 질문 항목
                             return ListTile(
                               title: Text(
-                                questions[index],
+                                questions[index - 1],
                                 style: const TextStyle(fontSize: 15),
                               ),
                               trailing: DropdownButton<int>(
-                                value: model.answers[index],
+                                value: model.answers[index - 1],
                                 underline: const SizedBox(),
                                 items: const [
-                                  DropdownMenuItem(
-                                      value: 0, child: Text("선택")),
-                                  DropdownMenuItem(
-                                      value: 3, child: Text("매우 그렇다")),
-                                  DropdownMenuItem(
-                                      value: 2, child: Text("보통이다")),
-                                  DropdownMenuItem(
-                                      value: 1, child: Text("전혀 아니다")),
+                                  DropdownMenuItem(value: 0, child: Text("선택")),
+                                  DropdownMenuItem(value: 3, child: Text("매우 그렇다")),
+                                  DropdownMenuItem(value: 2, child: Text("보통이다")),
+                                  DropdownMenuItem(value: 1, child: Text("전혀 아니다")),
                                 ],
                                 onChanged: (value) {
                                   if (value != null) {
-                                    model.setAnswer(index, value);
+                                    model.setAnswer(index - 1, value);
                                   }
                                 },
                               ),
                             );
                           } else {
+                            // 결과 버튼
                             return Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 24),
+                              padding: const EdgeInsets.symmetric(vertical: 24),
                               child: ElevatedButton(
                                 onPressed: () => controller.submit(context),
                                 style: ElevatedButton.styleFrom(
@@ -126,8 +147,9 @@ class SurveyView extends StatelessWidget {
                                 child: const Text(
                                   "결과 보러가기 >",
                                   style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                             );

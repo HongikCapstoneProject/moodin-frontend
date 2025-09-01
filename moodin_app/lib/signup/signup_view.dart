@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'signup_model.dart';
 import 'signup_controller.dart';
+import 'signup_response.dart'; // ✅ 성공 콜백으로 받는 응답 DTO
 
 class SignupView extends StatefulWidget {
   const SignupView({super.key});
@@ -13,14 +14,30 @@ class _SignupViewState extends State<SignupView> {
   late final SignupModel _model;
   late final SignupController _controller;
 
+  bool _loading = false; // ✅ 로딩 상태
+
   @override
   void initState() {
     super.initState();
     _model = SignupModel();
     _controller = SignupController(
       model: _model,
-      onError: (msg) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg))),
-      onSuccess: () => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('회원가입 완료'))),
+      onError: (msg) {
+        setState(() => _loading = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(msg)),
+        );
+      },
+      // ✅ SignupResponse를 매개변수로 받도록 시그니처 수정
+      onSuccess: (SignupResponse res) {
+        setState(() => _loading = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('회원가입 완료: ${res.username}\n토큰: ${res.token}')),
+        );
+        // TODO: 필요시 토큰 저장/화면 전환
+        // Navigator.pop(context);
+        // Navigator.pushReplacementNamed(context, '/home');
+      },
     );
   }
 
@@ -33,6 +50,7 @@ class _SignupViewState extends State<SignupView> {
         TextField(
           obscureText: obscure,
           onChanged: onChanged,
+          enabled: !_loading,
           decoration: InputDecoration(
             hintText: hint,
             filled: true,
@@ -43,6 +61,12 @@ class _SignupViewState extends State<SignupView> {
         const SizedBox(height: 16),
       ],
     );
+  }
+
+  Future<void> _onSubmit() async {
+    if (_loading) return;
+    setState(() => _loading = true);
+    await _controller.submit();
   }
 
   @override
@@ -69,14 +93,20 @@ class _SignupViewState extends State<SignupView> {
                     backgroundColor: const Color(0xFF455A64),
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
-                  onPressed: _controller.submit,
-                  child: const Text('회원가입', style: TextStyle(color: Colors.white, fontSize: 16)),
+                  onPressed: _loading ? null : _onSubmit,
+                  child: _loading
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                        )
+                      : const Text('회원가입', style: TextStyle(color: Colors.white, fontSize: 16)),
                 ),
               ),
               const SizedBox(height: 20),
               const Divider(),
               TextButton(
-                onPressed: () => Navigator.pop(context),
+                onPressed: _loading ? null : () => Navigator.pop(context),
                 child: const Text('이전', style: TextStyle(color: Colors.black54)),
               )
             ],

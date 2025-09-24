@@ -4,6 +4,9 @@ import 'measure_model.dart';
 import 'measure_controller.dart';
 import 'package:moodin_app/home/home_view.dart';
 import 'package:moodin_app/result/result_view.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'gsr_stream.dart';
+import 'package:moodin_app/main.dart';
 
 class MeasureView extends StatefulWidget {
   const MeasureView({Key? key}) : super(key: key);
@@ -24,7 +27,10 @@ class _MeasureViewState extends State<MeasureView> {
       // Provider에서 모델을 한 번만 가져옵니다.
       _model = Provider.of<MeasureModel>(context, listen: false);
       // 컨트롤러에 모델을 주입하고, 상태 변경 시 setState 호출
-      _controller = MeasureController(_model)
+      _controller = MeasureController(
+        _model,
+        context.read<GsrBleClient>(),
+      )
         ..addListener(() => setState(() {}));
       _initialized = true;
     }
@@ -107,7 +113,7 @@ class _MeasureViewState extends State<MeasureView> {
                 ),
               ),
               Text(
-                '${_model.gsr} ms',
+                '${_model.gsrMavg} ms',
                 style: const TextStyle(
                   fontSize: 40,
                   fontWeight: FontWeight.bold,
@@ -121,28 +127,48 @@ class _MeasureViewState extends State<MeasureView> {
     );
   }
 
+  bool _starting = false;
+
   Widget _buildStartButton() {
-    return SizedBox(
-      width: double.infinity,
-      height: 50,
-      child: ElevatedButton(
-        onPressed: _controller.startMeasurement,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF8EC3D8),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        ),
-        child: const Text(
-          '측정 시작하기',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Colors.black87,
-          ),
-        ),
+  final model = Provider.of<MeasureModel>(context, listen: true);
+  final disabled = _starting || model.isMeasuring;
+
+  return SizedBox(
+    width: double.infinity,
+    height: 50,
+    child: ElevatedButton(
+      onPressed: disabled
+          ? null
+          : () async {
+              setState(() => _starting = true);
+              try {
+                // 권한 요청이 따로 있다면 여기서 먼저 호출
+                await requestBlePermissions();
+                await _controller.startMeasurement(); // ← 비동기 호출
+              } catch (e) {
+                if (!mounted) return;
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text('시작 실패: $e')));
+              } finally {
+                if (mounted) setState(() => _starting = false);
+              }
+            },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color(0xFF8EC3D8),
+        disabledBackgroundColor: const Color(0xFF8EC3D8).withOpacity(0.6),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
-    );
-  }
+      child: _starting
+          ? const SizedBox(
+              width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+          : const Text(
+              '측정 시작하기',
+              style: TextStyle(
+                fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+            ),
+    ),
+  );
+}
 
   Widget _buildLoadingBox() {
     return Container(

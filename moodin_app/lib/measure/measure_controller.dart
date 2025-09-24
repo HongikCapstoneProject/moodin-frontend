@@ -1,24 +1,41 @@
-import 'measure_model.dart';
+import 'dart:async';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'measure_model.dart';
+import 'gsr_stream.dart';
 
+// ====== Controller ======
 class MeasureController extends ChangeNotifier {
   final MeasureModel model;
+  final GsrBleClient ble;
+  StreamSubscription<double>? _sub;
 
-  MeasureController(this.model);
+  MeasureController(this.model, this.ble);
 
-  void startMeasurement() { //측정 전
+  Future<void> startMeasurement() async {
+    if (_sub != null) return;          // 중복 구독 방지
     model.isMeasuring = true;
     model.isDone = false;
-    //model.state = MeasureState.measuring;
     notifyListeners();
 
-    Future.delayed(const Duration(seconds: 5), () { //측정 후 , Duration = 측정 시작하고 n초 후에 완료 처리 (수정가능)
-      model.isMeasuring = false;
-      model.isDone = true;
-      model.hrv = 30; //측정값을 예시로 넣어둔거라 나중에 수정해야함
-      model.gsr = 57; //마찬가지
-      //model.state = MeasureState.done;
+    _sub = ble.startStream().listen((mavg) {
+      model.gsrMavg = mavg;
+      model.isMeasuring = true;
+      model.isDone = false;
+      notifyListeners();
+    }, onError: (e) {
+      model.isMeasuring = true;
       notifyListeners();
     });
+  }
+
+  Future<void> stopMeasurement() async {
+    await _sub?.cancel();
+    _sub = null;
+    await ble.stop();
+    model.isMeasuring = false;
+    model.isDone = true;
+    notifyListeners();
   }
 }

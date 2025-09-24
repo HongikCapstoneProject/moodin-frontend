@@ -31,7 +31,8 @@ dependencies:
   flutter:
     sdk: flutter
   fl_chart: ^0.68.0
-
+  flutter_blue_plus: ^2.0.0
+  http: ^1.5.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -47,6 +48,7 @@ dependencies:
 
   # Added to resolve URI error
   url_launcher: ^6.2.1
+  permission_handler: ^12.0.1
 
 
 dev_dependencies:

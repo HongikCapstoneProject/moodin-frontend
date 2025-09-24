@@ -9,17 +9,35 @@ import 'package:moodin_app/mypage/mypage_view.dart';
 import 'package:moodin_app/survey/survey_model.dart'; 
 import 'package:moodin_app/survey/survey_view.dart'; 
 import 'package:moodin_app/survey/survey_result_view.dart'; 
+import 'package:permission_handler/permission_handler.dart';
+import 'measure/gsr_stream.dart';
 
-void main() {
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(
     MultiProvider(
       providers: [
+        Provider<GsrBleClient>(create: (_) => GsrBleClient()),
         ChangeNotifierProvider(create: (_) => MeasureModel()),
         ChangeNotifierProvider(create: (_) => SurveyModel()),
       ],
       child: const MyApp(),
     ),
   );
+}
+
+Future<void> requestBlePermissions() async {
+  // Android 12 이상에서는 반드시 필요
+  final statuses = await [
+    Permission.bluetoothScan,
+    Permission.bluetoothConnect,
+    Permission.location, // 일부 기기는 위치 권한 있어야 스캔됨
+  ].request();
+
+  if (statuses.values.any((s) => !s.isGranted)) {
+    throw Exception('BLE 권한이 필요합니다. 설정에서 허용해주세요.');
+  }
 }
 
 class MyApp extends StatelessWidget {

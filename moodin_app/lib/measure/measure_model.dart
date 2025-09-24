@@ -38,5 +38,5 @@ class MeasureModel extends ChangeNotifier {
   bool isDone = false;
 
   int hrv = 0;
-  int gsr = 0;
+  double? gsrMavg = 0;
 }

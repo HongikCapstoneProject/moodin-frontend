@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:moodin_app/measure/measure_model.dart';
 import 'package:moodin_app/measure/measure_view.dart';
 import 'package:moodin_app/result/result_view.dart';
-import 'package:moodin_app/survey/survey_view.dart'; // ✅ 설문조사 페이지 import
+import 'package:moodin_app/survey/survey_view.dart';
 
 class HomeView extends StatelessWidget {
   final String username;
@@ -122,9 +122,9 @@ class HomeView extends StatelessWidget {
                       ],
                     ),
                   ),
-                  // ✅ bunny + 텍스트 클릭 시 SurveyView로 이동
+                  // ✅ 하단 자가진단 UI
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 80),
+                    padding: const EdgeInsets.only(bottom: 80, left: 24, right: 24),
                     child: GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -133,25 +133,64 @@ class HomeView extends StatelessWidget {
                               builder: (context) => const SurveyView()),
                         );
                       },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/images/bunny_emoji.png',
-                            width: 90,
-                            height: 90,
-                          ),
-                          const SizedBox(width: 8),
-                          const Text(
-                            '설문조사를 통해\n오늘의 스트레스와 비교해보세요!',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w800,
-                              color: Color(0xFF364D57),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 24),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(24),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black,
+                              spreadRadius: 1,
+                              blurRadius: 5,
+                              offset: const Offset(0, 3),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/images/bunny_emoji.png',
+                                      width: 24,
+                                      height: 24,
+                                    ),
+                                    const SizedBox(width: 8),
+                                    const Text(
+                                      '자가진단을 통해',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w800,
+                                        color: Color(0xFF364D57),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 4),
+                                const Text(
+                                  '오늘의 스트레스와 비교해보세요!',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0xFF607D8B),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const Text(
+                              '자가진단 하러가기 >',
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

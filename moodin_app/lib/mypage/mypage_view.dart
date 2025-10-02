@@ -3,6 +3,7 @@ import 'mypage_controller.dart';
 import 'mypage_model.dart';
 import 'package:provider/provider.dart';
 import 'package:moodin_app/measure/measure_model.dart';
+import 'package:moodin_app/Hwabyeong/Hwabyeong_view.dart';
 
 class MyPageView extends StatelessWidget {
   const MyPageView({super.key});
@@ -192,7 +193,12 @@ class MyPageView extends StatelessWidget {
                                 const SizedBox(height: 10),
                                 ElevatedButton(
                                   onPressed: () {
-                                    // TODO: 이동할 화면 연결
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const HwabyeongView()),
+                                    );
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.grey.shade200,

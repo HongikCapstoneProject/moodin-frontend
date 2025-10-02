@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'mypage_controller.dart';
 import 'mypage_model.dart';
 import 'package:provider/provider.dart';
 import 'package:moodin_app/measure/measure_model.dart';
+import 'package:moodin_app/Hwabyeong/Hwabyeong_view.dart';
 
 class MyPageView extends StatelessWidget {
   const MyPageView({super.key});
@@ -112,7 +112,7 @@ class MyPageView extends StatelessWidget {
 
                     const SizedBox(height: 30),
 
-                    // mood in 텍스트 + 측정 여부에 따라 빨간불 표시
+                    // mood in 텍스트 + 빨간불
                     Row(
                       children: [
                         const Icon(Icons.favorite, color: Colors.blue),
@@ -123,6 +123,12 @@ class MyPageView extends StatelessWidget {
                         const Text('은', style: TextStyle(fontSize: 16)),
                         const SizedBox(width: 8),
                         if (measureModel.isDone) ...[
+                          Image.asset(
+                            'assets/images/redlight.png',
+                            width: 50,
+                            height: 50,
+                          ),
+                          const SizedBox(width: 6),
                           Text(
                             '빨간불',
                             style: TextStyle(
@@ -131,62 +137,83 @@ class MyPageView extends StatelessWidget {
                               color: Colors.red.shade700,
                             ),
                           ),
-                          const SizedBox(width: 6),
-                          Image.asset(
-                            'assets/images/redlight.png',
-                            width: 50,
-                            height: 50,
-                          ),
                         ],
                       ],
                     ),
 
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 50),
 
-                    // 스트레스 추이 그래프
-                    RichText(
-                      text: TextSpan(
-                        style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87),
-                        children: [
-                          const TextSpan(text: '최근 '),
-                          TextSpan(
-                              text: '${user.nickname} ',
-                              style: const TextStyle(color: Colors.lightBlue)),
-                          const TextSpan(text: '님의 스트레스 추이'),
-                        ],
-                      ),
-                    ),
-
-                    const SizedBox(height: 12),
-
-                    SizedBox(
-                      height: 160,
-                      child: LineChart(
-                        LineChartData(
-                          lineBarsData: [
-                            LineChartBarData(
-                              isCurved: true,
-                              spots: List.generate(
-                                user.stressTrend.length,
-                                (i) =>
-                                    FlSpot(i.toDouble(), user.stressTrend[i]),
+                    // questionBunny + 말풍선
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // 토끼 이미지
+                        Image.asset(
+                          'assets/images/questionBunny.png',
+                          width: 120,
+                        ),
+                        const SizedBox(width: 12),
+                        // 말풍선
+                        Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.all(14),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                color: Colors.grey.shade300,
                               ),
-                              barWidth: 3,
-                              color: Colors.blue,
-                              dotData: FlDotData(show: false),
-                            )
-                          ],
-                          gridData: FlGridData(show: false),
-                          titlesData: FlTitlesData(show: false),
-                          borderData: FlBorderData(
-                            show: true,
-                            border: Border.all(color: Colors.blue),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.05),
+                                  blurRadius: 4,
+                                  offset: const Offset(2, 2),
+                                )
+                              ],
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                RichText(
+                                  text: TextSpan(
+                                    style: const TextStyle(
+                                        fontSize: 16, color: Colors.black87),
+                                    children: [
+                                      TextSpan(
+                                          text: '화병',
+                                          style: TextStyle(
+                                              color: Colors.red.shade700,
+                                              fontWeight: FontWeight.bold)),
+                                      const TextSpan(text: '에 대해 알고계신가요?\n'),
+                                      const TextSpan(
+                                          text: '궁금하다면 저와 함께 알아보아요.'),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const HwabyeongView()),
+                                    );
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.grey.shade200,
+                                    foregroundColor: Colors.black87,
+                                    elevation: 0,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16, vertical: 8),
+                                  ),
+                                  child: const Text("알아보러 가기"),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
+                      ],
                     ),
                   ],
                 ),

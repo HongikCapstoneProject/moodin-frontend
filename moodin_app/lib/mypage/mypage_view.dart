@@ -68,83 +68,98 @@ class MyPageView extends StatelessWidget {
                   topRight: Radius.circular(32),
                 ),
               ),
-              child: SingleChildScrollView(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // 프로필 카드
-                    Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xE6E9F8FF),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      padding: const EdgeInsets.all(16),
-                      child: Row(
+              child: Column(
+                // 1. 전체를 Column으로 감쌉니다.
+                children: [
+                  // 2. 스크롤이 필요한 부분만 Expanded와 SingleChildScrollView로 감쌉니다.
+                  Expanded(
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 30),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              Image.asset('assets/images/star.png', width: 80),
-                              Image.asset('assets/images/bunny.png', width: 60),
-                            ],
-                          ),
-                          const SizedBox(width: 16),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('닉네임  ${user.nickname}',
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold)),
-                              const SizedBox(height: 4),
-                              Text('이메일  ${user.email}',
-                                  style: const TextStyle(fontSize: 16)),
-                              const SizedBox(height: 4),
-                              Text('스펙 및 성별  ${user.gender}',
-                                  style: const TextStyle(fontSize: 16)),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-
-                    const SizedBox(height: 30),
-
-                    // mood in 텍스트 + 빨간불
-                    Row(
-                      children: [
-                        const Icon(Icons.favorite, color: Colors.blue),
-                        const SizedBox(width: 8),
-                        const Text('오늘 나의 ', style: TextStyle(fontSize: 16)),
-                        const Text('mood in',
-                            style: TextStyle(fontSize: 16, color: Colors.blue)),
-                        const Text('은', style: TextStyle(fontSize: 16)),
-                        const SizedBox(width: 8),
-                        if (measureModel.isDone) ...[
-                          Image.asset(
-                            'assets/images/redlight.png',
-                            width: 50,
-                            height: 50,
-                          ),
-                          const SizedBox(width: 6),
-                          Text(
-                            '빨간불',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.red.shade700,
+                          // 프로필 카드
+                          Container(
+                            decoration: BoxDecoration(
+                              color: const Color(0xE6E9F8FF),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            padding: const EdgeInsets.all(16),
+                            child: Row(
+                              children: [
+                                Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Image.asset('assets/images/star.png',
+                                        width: 80),
+                                    Image.asset('assets/images/bunny.png',
+                                        width: 60),
+                                  ],
+                                ),
+                                const SizedBox(width: 16),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('닉네임  ${user.nickname}',
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold)),
+                                    const SizedBox(height: 4),
+                                    Text('이메일  ${user.email}',
+                                        style: const TextStyle(fontSize: 16)),
+                                    const SizedBox(height: 4),
+                                    Text('스펙 및 성별  ${user.gender}',
+                                        style: const TextStyle(fontSize: 16)),
+                                  ],
+                                )
+                              ],
                             ),
                           ),
+
+                          const SizedBox(height: 30),
+
+                          // mood in 텍스트 + 빨간불
+                          Row(
+                            children: [
+                              const Icon(Icons.favorite, color: Colors.blue),
+                              const SizedBox(width: 8),
+                              const Text('오늘 나의 ',
+                                  style: TextStyle(fontSize: 16)),
+                              const Text('mood in',
+                                  style: TextStyle(
+                                      fontSize: 16, color: Colors.blue)),
+                              const Text('은', style: TextStyle(fontSize: 16)),
+                              const SizedBox(width: 8),
+                              if (measureModel.isDone) ...[
+                                Image.asset(
+                                  'assets/images/redlight.png',
+                                  width: 50,
+                                  height: 50,
+                                ),
+                                const SizedBox(width: 6),
+                                Text(
+                                  '빨간불',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.red.shade700,
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
+                          // 3. 토끼와 말풍선 부분은 여기서 제거합니다.
                         ],
-                      ],
+                      ),
                     ),
+                  ),
 
-                    const SizedBox(height: 50),
-
-                    // questionBunny + 말풍선
-                    Row(
+                  // 4. 스크롤 영역 밖에, Column의 자식으로 토끼와 말풍선을 배치합니다.
+                  Padding(
+                    padding:
+                        const EdgeInsets.fromLTRB(20, 0, 20, 30), // 하단 여백 추가
+                    child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // 토끼 이미지
@@ -215,8 +230,8 @@ class MyPageView extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

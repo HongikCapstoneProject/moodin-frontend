@@ -1,5 +1,6 @@
 // lib/mypage/hwabyeong_view.dart
 import 'package:flutter/material.dart';
+import 'Hwabyeong_measure_view.dart';
 
 class HwabyeongView extends StatelessWidget {
   const HwabyeongView({Key? key}) : super(key: key);
@@ -219,7 +220,12 @@ class HwabyeongView extends StatelessWidget {
                           ),
                         ),
                         onPressed: () {
-                          // TODO: 분석 페이지 연결
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HwabyeongMeasureView(),
+                            ),
+                          );
                         },
                         child: const Text(
                           '지금 분석하러 가기 >',

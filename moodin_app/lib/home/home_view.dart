@@ -122,75 +122,94 @@ class HomeView extends StatelessWidget {
                       ],
                     ),
                   ),
+
                   // ✅ 하단 자가진단 UI
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 80, left: 24, right: 24),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const SurveyView()),
-                        );
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 24),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(24),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black,
-                              spreadRadius: 1,
-                              blurRadius: 5,
-                              offset: const Offset(0, 3),
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Image.asset(
-                                      'assets/images/bunny_emoji.png',
-                                      width: 24,
-                                      height: 24,
-                                    ),
-                                    const SizedBox(width: 8),
-                                    const Text(
-                                      '자가진단을 통해',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w800,
-                                        color: Color(0xFF364D57),
+                    padding:
+                        const EdgeInsets.only(bottom: 80, left: 24, right: 24),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 20, horizontal: 20),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.6),
+                        borderRadius: BorderRadius.circular(0),
+                      ),
+                      child: Stack(
+                        children: [
+                          // 왼쪽 아이콘 + 설명 텍스트
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Image.asset(
+                                'assets/images/todo.png',
+                                width: 70,
+                                height: 70,
+                              ),
+                              const SizedBox(width: 7),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: const [
+                                    // ✅ "자가진단"(볼드) + 줄바꿈
+                                    Text.rich(
+                                      TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: '자가진단',
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w900,
+                                              color: Color(0xFF364D57),
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text: '을 통해\n',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w400,
+                                              color: Color(0xFF364D57),
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text: '오늘의 스트레스와 비교해보세요!',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w400,
+                                              color: Color(0xFF607D8B),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],
                                 ),
-                                const SizedBox(height: 4),
-                                const Text(
-                                  '오늘의 스트레스와 비교해보세요!',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                    color: Color(0xFF607D8B),
-                                  ),
+                              ),
+                            ],
+                          ),
+
+                          // 오른쪽 하단 빨간 버튼 텍스트
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const SurveyView()),
+                                );
+                              },
+                              child: const Text(
+                                '자가진단 하러가기 >',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w900,
+                                  color: Color(0xFFb91113),
                                 ),
-                              ],
-                            ),
-                            const Text(
-                              '자가진단 하러가기 >',
-                              style: TextStyle(
-                                color: Colors.red,
-                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),

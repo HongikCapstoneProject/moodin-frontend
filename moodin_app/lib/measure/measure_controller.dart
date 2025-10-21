@@ -6,18 +6,21 @@ class MeasureController extends ChangeNotifier {
 
   MeasureController(this.model);
 
-  void startMeasurement() { //측정 전
+  void setUploadedFileName(String name) {
+    model.uploadedFileName = name;
+    notifyListeners();
+  }
+
+  void startMeasurement() {
     model.isMeasuring = true;
     model.isDone = false;
-    //model.state = MeasureState.measuring;
     notifyListeners();
 
-    Future.delayed(const Duration(seconds: 5), () { //측정 후 , Duration = 측정 시작하고 n초 후에 완료 처리 (수정가능)
+    Future.delayed(const Duration(seconds: 5), () {
       model.isMeasuring = false;
       model.isDone = true;
-      model.hrv = 30; //측정값을 예시로 넣어둔거라 나중에 수정해야함
-      model.gsr = 57; //마찬가지
-      //model.state = MeasureState.done;
+      model.hrv = 42; // 예시 측정값
+      model.gsr = 61; // 예시 측정값
       notifyListeners();
     });
   }

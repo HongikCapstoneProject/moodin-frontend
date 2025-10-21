@@ -39,4 +39,6 @@ class MeasureModel extends ChangeNotifier {
 
   int hrv = 0;
   int gsr = 0;
+
+  String? uploadedFileName; // 업로드한 파일 이름 저장
 }

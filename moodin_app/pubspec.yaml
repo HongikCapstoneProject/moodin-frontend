@@ -47,6 +47,7 @@ dependencies:
 
   # Added to resolve URI error
   url_launcher: ^6.2.1
+  file_picker: ^10.3.3
 
 
 dev_dependencies:
